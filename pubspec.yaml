@@ -1,0 +1,71 @@
+name: restuarant_app
+description: "A new Flutter project."
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  http_parser: ^4.1.2
+  get: ^4.7.3
+  flutter_screenutil: ^5.9.3
+  intl: ^0.20.2
+  lottie: ^3.3.1
+  shared_preferences: ^2.5.3
+  flutter_svg: ^2.2.3
+  carousel_slider: ^5.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^5.0.0
+
+
+
+# The following section is specific to Flutter packages.
+flutter:
+
+
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/images/
+    - assets/fonts/
+    - assets/lottie/
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+     - family: DmSans
+       fonts:
+         - asset: assets/fonts/dm_sans_100.ttf
+         - asset: assets/fonts/dm_sans_200.ttf
+         - asset: assets/fonts/dm_sans_300.ttf
+         - asset: assets/fonts/dm_sans_400.ttf
+         - asset: assets/fonts/dm_sans_500.ttf
+         - asset: assets/fonts/dm_sans_600.ttf
+         - asset: assets/fonts/dm_sans_700.ttf
+         - asset: assets/fonts/dm_sans_800.ttf
+         - asset: assets/fonts/dm_sans_900.ttf
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package
