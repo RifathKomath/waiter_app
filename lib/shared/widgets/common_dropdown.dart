@@ -33,7 +33,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.showHeading = false,
     this.headingText,
     this.w = 120,
-    this.h = 56,
+    this.h = 45,
     this.hintStyle,
     this.itemToString,
     this.onTap,
@@ -88,8 +88,8 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
           children: [
             if (widget.showHeading && widget.headingText != null) ...[
               Text(widget.headingText!,
-                  style: AppTextStyles.textStyle_500_14.copyWith(color: textColor)),
-              5.hBox,
+                  style: AppTextStyles.textStyle_500_14.copyWith(color: textPrimary)),
+              8.hBox,
             ],
 
             /// 🔥 Animated container
@@ -100,14 +100,12 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
               height: 40,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: _isOpen ? textColor : messageButtonClr,
-                  width: _isOpen ? 1.5 : 1,
-                ),
+                color: cardBgLight,
+                
                 borderRadius: BorderRadius.circular(widget.radius),
               ),
               child: InkWell(
-  onTap: () => _showDropdown(context, field),
+  onTap: () => _showDropdown(context, field), 
   child: Row(
     children: [
       Expanded(
@@ -120,15 +118,15 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
           style: field.value == null
               ? (widget.hintStyle ??
                   AppTextStyles.textStyle_500_14
-                      .copyWith(color: textColor))
-              : AppTextStyles.textStyle_500_14.copyWith(color: whiteClr),
+                      .copyWith(color: textPrimary))
+              : AppTextStyles.textStyle_500_14.copyWith(color: textPrimary),
         ),
       ),
 
       /// 🔄 Rotating arrow
       RotationTransition(
         turns: _rotation,
-        child: AppSvg(assetName: "grey_down_arrow",color: textColor,),
+        child: AppSvg(assetName: "grey_down_arrow",color: textPrimary,),
       ),
     ],
   ),
@@ -160,7 +158,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
 
   final selected = await showMenu<T>(
     context: context,
-    color: const Color.fromARGB(255, 73, 71, 71), // ✅ white background
+    color: cardBg, 
     elevation: 6,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(widget.radius),
@@ -184,7 +182,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
           widget.itemToString != null
               ? widget.itemToString!(e)
               : e.toString(),
-          style: AppTextStyles.textStyle_500_14.copyWith(color: textColor),
+          style: AppTextStyles.textStyle_500_14.copyWith(color: textPrimary),
         ),
       );
     }).toList(),

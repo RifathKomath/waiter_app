@@ -1,22 +1,14 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:restuarant_app/core/extensions/margin_extension.dart';
-
 import '../../../core/style/app_text_style.dart';
 import '../../../core/style/colors.dart';
 import '../../../shared/widgets/app_button.dart';
-import '../../../shared/widgets/app_svg.dart';
 import '../../../shared/widgets/app_text_field.dart';
-
-import 'dart:ui';
-import 'package:flutter/material.dart';
-
 import '../../controller/login/login_controller.dart';
-
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
 
@@ -31,7 +23,7 @@ class LoginView extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF120A23), Color.fromARGB(255, 73, 56, 100)],
+            colors: [scaffoldBgDark, scaffoldBgLight],
           ),
         ),
         child: Center(
@@ -45,9 +37,9 @@ class LoginView extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF282437).withOpacity(0.85),
+                    color: cardBg,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.white.withOpacity(0.08)),
+                  
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -56,7 +48,7 @@ class LoginView extends StatelessWidget {
                       Text(
                         "Waiter Portal",
                         style: AppTextStyles.textStyle_700_24.copyWith(
-                          color: whiteClr,
+                          color: textPrimary,
                           fontSize: 26,
                         ),
                       ),
@@ -64,7 +56,7 @@ class LoginView extends StatelessWidget {
                       Text(
                         "Sign in to start serving",
                         style: AppTextStyles.textStyle_400_12.copyWith(
-                          color: textColor,
+                          color: textPrimary,
                         ),
                       ),
 
@@ -78,7 +70,7 @@ class LoginView extends StatelessWidget {
                         useHintInsteadOfLabel: true,
                         prefixIcon: Icon(
                           Icons.person_outline,
-                          color: Colors.white70,
+                          color: scaffoldBgLight,
                         ),
                       ),
 
@@ -94,14 +86,14 @@ class LoginView extends StatelessWidget {
                           obscureText: !controller.isPasswordVisible.value,
                           prefixIcon: Icon(
                             Icons.lock_outline,
-                            color: Colors.white70,
+                            color: scaffoldBgLight,
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
                               controller.isPasswordVisible.value
                                   ? Icons.visibility
                                   : Icons.visibility_off,
-                              color: Colors.white70,
+                              color: scaffoldBgLight,
                             ),
                             onPressed: controller.togglePasswordVisibility,
                           ),
@@ -109,11 +101,14 @@ class LoginView extends StatelessWidget {
                       ),
 
                       26.h.hBox,
-                      Obx(()=>
-                       AppButton(
+                      Obx(
+                        () => AppButton(
+                          bgColor: cardBgLight,
                           label: "Sign In",
                           isLoaderBtn: controller.isLoading.value,
-                          onTap: () {controller.login();},
+                          onTap: () {
+                            controller.login(context: context);
+                          },
                           isPrefixIconEnabled: true,
                           icon: Icons.login,
                         ),
@@ -123,7 +118,7 @@ class LoginView extends StatelessWidget {
                       Text(
                         "Restaurant Management System",
                         style: AppTextStyles.textStyle_400_12.copyWith(
-                          color: textColor,
+                          color: textPrimary,
                         ),
                       ),
                     ],

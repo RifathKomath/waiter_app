@@ -5,6 +5,7 @@ import 'package:restuarant_app/core/extensions/margin_extension.dart';
 import 'package:restuarant_app/shared/utils/screen_utils.dart';
 import 'package:restuarant_app/shared/widgets/app_button.dart';
 import 'package:restuarant_app/shared/widgets/app_search_field.dart';
+import 'package:restuarant_app/shared/widgets/app_success_dialog.dart';
 
 import '../../../core/style/app_text_style.dart';
 import '../../../core/style/colors.dart';
@@ -17,15 +18,15 @@ class CartItem {
   final PortionType portion;
   int quantity;
   final double price;
-  String prepareNote;
+  RxString prepareNote;
 
   CartItem({
     required this.dish,
     required this.portion,
     required this.quantity,
     required this.price,
-    this.prepareNote = "",
-  });
+    String? prepareNote,
+  }) : prepareNote = (prepareNote ?? "").obs;
 }
 
 enum PortionType { quarter, half, full }
@@ -72,12 +73,12 @@ class MenuView extends StatelessWidget {
     final CategoryController controller = Get.put(CategoryController());
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: appBarClr,
+        backgroundColor: scaffoldBgDark,
         title: Text(
           "Back to Tables",
-          style: AppTextStyles.textStyle_500_16.copyWith(color: textColor),
+          style: AppTextStyles.textStyle_500_16.copyWith(color: textPrimary),
         ),
-        iconTheme: IconThemeData(color: textColor),
+        iconTheme: IconThemeData(color: textPrimary),
       ),
       body: Container(
         width: double.infinity,
@@ -86,15 +87,16 @@ class MenuView extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF120A23), Color.fromARGB(255, 73, 56, 100)],
+          colors: [scaffoldBgDark, scaffoldBgLight],
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Divider(color: dividerColor, thickness: 1.5),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
@@ -102,7 +104,7 @@ class MenuView extends StatelessWidget {
                       Text(
                         "Table ${tableList.join(', ')}",
                         style: AppTextStyles.textStyle_700_24.copyWith(
-                          color: whiteClr,
+                          fontSize: 20,color: textPrimary
                         ),
                       ),
                       Spacer(),
@@ -116,8 +118,16 @@ class MenuView extends StatelessWidget {
                           },
                           child: Stack(
                             children: [
-                              Icon(Icons.shopping_cart, color: whiteClr),
-                              countBox(countValue: controller.cartItems.length),
+                              Icon(Icons.shopping_cart, color: textPrimary),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                  top: 10,
+                                ),
+                                child: countBox(
+                                  countValue: controller.cartItems.length,
+                                ),
+                              ),
                             ],
                           ),
                         );
@@ -127,7 +137,7 @@ class MenuView extends StatelessWidget {
                   Text(
                     section,
                     style: AppTextStyles.textStyle_500_14.copyWith(
-                      color: whiteClr,
+                      color: textPrimary,
                     ),
                   ),
                   10.h.hBox,
@@ -135,6 +145,8 @@ class MenuView extends StatelessWidget {
                     selectedValue: branchList.first,
                     items: branchList,
                     w: double.infinity,
+                    radius: 8,
+                  
                     onChanged: (value) {
                       controller.selectedFoodType.value = value!;
                     },
@@ -152,86 +164,89 @@ class MenuView extends StatelessWidget {
                   ),
                 ],
               ),
-              15.h.hBox,
-              Text(
-                "Food Type",
-                style: AppTextStyles.textStyle_500_14.copyWith(
-                  color: textColor,
-                ),
+            ),
+            15.h.hBox,
+            Text(
+              "Food Type",
+              style: AppTextStyles.textStyle_500_14.copyWith(
+                color: textPrimary,
               ),
-              10.h.hBox,
-              Obx(() {
-                if (controller.selectedIndex.value >= 0) {
-                  return SizedBox(
-                    height: 40,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: categories.length,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      separatorBuilder: (_, __) => const SizedBox(width: 8),
-                      itemBuilder: (context, index) {
-                        final isSelected =
-                            controller.selectedIndex.value == index;
+            ).paddingSymmetricHorizontal(20),
+            10.h.hBox,
+            Obx(() {
+              if (controller.selectedIndex.value >= 0) {
+                return SizedBox(
+                  height: 40,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: categories.length,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    separatorBuilder: (_, __) => const SizedBox(width: 8),
+                    itemBuilder: (context, index) {
+                      final isSelected =
+                          controller.selectedIndex.value == index;
 
-                        return GestureDetector(
-                          onTap: () => controller.selectCategory(index),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? Color(0xFF8E2DE2)
-                                  : whiteClr.withOpacity(0.10),
+                      return GestureDetector(
+                        onTap: () => controller.selectCategory(index),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? textSecondary
+                                : whiteClr.withOpacity(0.10),
 
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 3,
-                            ),
-                            child: Center(
-                              child: Text(
-                                categories[index],
-                                style: AppTextStyles.textStyle_400_12.copyWith(
-                                  color: isSelected ? Colors.white : textColor,
-                                ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 3,
+                          ),
+                          child: Center(
+                            child: Text(
+                              categories[index],
+                              style: AppTextStyles.textStyle_500_12.copyWith(
+                                color: isSelected ? Colors.black : textPrimary,
                               ),
                             ),
                           ),
-                        );
-                      },
-                    ),
-                  );
-                }
-                return SizedBox();
-              }),
-              20.h.hBox,
-              AppSearchField(
-                controller: controller.searchCntrl,
-                onChanged: (value) {
-                  controller.searchQuery.value = value;
-                },
-              ),
-              20.h.hBox,
-              Expanded(
-                child: Obx(() {
-                  final dishes = controller.filteredDishes;
+                        ),
+                      );
+                    },
+                  ),
+                ).paddingSymmetricHorizontal(10);
+              }
+              return SizedBox();
+            }),
+            20.h.hBox,
+            AppSearchField(
+              controller: controller.searchCntrl,
+              onChanged: (value) {
+                controller.searchQuery.value = value;
+              },
+            ).paddingSymmetricHorizontal(20),
+            20.h.hBox,
+            Expanded(
+              child: Obx(() {
+                final dishes = controller.filteredDishes;
 
-                  return ListView.builder(
-                    itemCount: dishes.length,
-                    itemBuilder: (context, index) {
-                      final dish = dishes[index];
-                      final selectedPortion =
-                          controller.selectedPortions[index] ??
-                          dish.portions.first.type;
+                return ListView.builder(
+                  itemCount: dishes.length,
+                  itemBuilder: (context, index) {
+                    final dish = dishes[index];
+                    final selectedPortion =
+                        controller.selectedPortions[index] ??
+                        dish.portions.first.type;
 
-                      final price = dish.portions
-                          .firstWhere((p) => p.type == selectedPortion)
-                          .price;
+                    final price = dish.portions
+                        .firstWhere((p) => p.type == selectedPortion)
+                        .price;
 
-                      return Container(
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Container(
                         margin: const EdgeInsets.only(bottom: 12),
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
+                          color: cardBg,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Column(
@@ -239,17 +254,17 @@ class MenuView extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.asset(
-                                    dish.image,
-                                    width: 70,
-                                    height: 70,
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
+                          //  index ==0 ?0.wBox :    ClipRRect(
+                          //         borderRadius: BorderRadius.circular(8),
+                          //         child: Image.asset(
+                          //           dish.image,
+                          //           width: 70,
+                          //           height: 70,
+                          //           fit: BoxFit.fill,
+                          //         ),
+                          //       ),
 
-                                6.w.wBox,
+                          //       6.w.wBox,
 
                                 Expanded(
                                   flex: 1,
@@ -262,14 +277,25 @@ class MenuView extends StatelessWidget {
                                         style: AppTextStyles.textStyle_600_16
                                             .copyWith(color: whiteClr),
                                       ),
-                                      Text(
-                                        dish.isVeg ? "Veg" : "Non-Veg",
-                                        style: TextStyle(
-                                          color: dish.isVeg
-                                              ? Colors.green
-                                              : Colors.red,
-                                          fontSize: 12,
-                                        ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.circle,
+                                            size: 15,
+                                            color: dish.isVeg
+                                                ? Colors.green
+                                                : Colors.red,
+                                          ),
+                                          Text(
+                                            dish.isVeg ? "Veg" : "Non-Veg",
+                                            style: TextStyle(
+                                              color: dish.isVeg
+                                                  ? Colors.green
+                                                  : Colors.red,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
                                       ),
 
                                       6.h.hBox,
@@ -296,13 +322,13 @@ class MenuView extends StatelessWidget {
                                               child: Container(
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                      horizontal: 8,
-                                                      vertical: 4,
+                                                      horizontal: 15,
+                                                      vertical: 8,
                                                     ),
                                                 decoration: BoxDecoration(
                                                   color: isSelected
-                                                      ? const Color(0xFF8E2DE2)
-                                                      : Colors.transparent,
+                                                      ? textSecondary
+                                : whiteClr.withOpacity(0.10),
                                                   borderRadius:
                                                       BorderRadius.circular(6),
                                                   border: Border.all(
@@ -313,12 +339,9 @@ class MenuView extends StatelessWidget {
                                                 ),
                                                 child: Text(
                                                   p.type.name,
-                                                  style: TextStyle(
-                                                    fontSize: 10,
-                                                    color: isSelected
-                                                        ? Colors.white
-                                                        : whiteClr,
-                                                  ),
+                                                  style: AppTextStyles.textStyle_500_12.copyWith(color:isSelected
+                                                        ? Colors.black
+                                                        : whiteClr, ) 
                                                 ),
                                               ),
                                             );
@@ -342,59 +365,61 @@ class MenuView extends StatelessWidget {
                                       Text(
                                         "₹$price",
                                         style: AppTextStyles.textStyle_600_16
-                                            .copyWith(color: whiteClr),
+                                            .copyWith(color: textPrimary),
                                       ),
                                       6.h.hBox,
                                       Container(
                                         padding: const EdgeInsets.symmetric(
-                                        
                                           vertical: 4,
                                         ),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
                                             8,
                                           ),
-                                          border: Border.all(color: textColor),
+                                          border: Border.all(color: textPrimary),
                                         ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                controller.removeItem(
-                                                  index,
-                                                  selectedPortion,
-                                                );
-                                              },
-                                              child: const Icon(
-                                                Icons.remove,
-                                                size: 24,
-                                                color: Colors.white,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  controller.removeItem(
+                                                    index,
+                                                    selectedPortion,
+                                                  );
+                                                },
+                                                child: const Icon(
+                                                  Icons.remove,
+                                                  size: 24,
+                                                  color: textPrimary,
+                                                ),
                                               ),
-                                            ),
-                                            8.w.wBox,
-                                            Text(
-                                              quantity.toString(),
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 17,
+                                              8.w.wBox,
+                                              Text(
+                                                quantity.toString(),
+                                                style: const TextStyle(
+                                                  color: textPrimary,
+                                                  fontSize: 17,
+                                                ),
                                               ),
-                                            ),
-                                            8.w.wBox,
-                                            GestureDetector(
-                                              onTap: () {
-                                                controller.addItem(
-                                                  index,
-                                                  selectedPortion,
-                                                );
-                                              },
-                                              child: const Icon(
-                                                Icons.add,
-                                                size: 24,
-                                                color: Colors.white,
+                                              8.w.wBox,
+                                              GestureDetector(
+                                                onTap: () {
+                                                  controller.addItem(
+                                                    index,
+                                                    selectedPortion,
+                                                  );
+                                                },
+                                                child: const Icon(
+                                                  Icons.add,
+                                                  size: 24,
+                                                  color: textPrimary,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -418,7 +443,9 @@ class MenuView extends StatelessWidget {
                                       children: [
                                         Expanded(
                                           child: AppButton(
+                                             bgColor: textPrimary,
                                             label: "Remove",
+                                            textColor: Colors.black,
                                             isFilled: true,
                                             onTap: () {
                                               controller.removeAllFromCart(
@@ -432,15 +459,23 @@ class MenuView extends StatelessWidget {
                                         10.w.wBox,
                                         Expanded(
                                           child: AppButton(
-                                            label: "Add",
+                                            bgColor: cardBgLight,
+                                            label: controller.cartItems.isEmpty
+                                                ? "Add"
+                                                : "Added",
                                             onTap: () {
-                                              // controller.addItem(index, selectedPortion);
-
-                                              controller.addToCart(
-                                                dish: dish,
-                                                portion: selectedPortion,
-                                                price: price,
-                                                quantity: quantity,
+                                              SuccessDialog.show(
+                                                context,
+                                                message:
+                                                    "Order added to cart successfully",
+                                                onComplete: () {
+                                                  controller.addToCart(
+                                                    dish: dish,
+                                                    portion: selectedPortion,
+                                                    price: price,
+                                                    quantity: quantity,
+                                                  );
+                                                },
                                               );
                                             },
                                           ),
@@ -451,13 +486,13 @@ class MenuView extends StatelessWidget {
                             }),
                           ],
                         ),
-                      );
-                    },
-                  );
-                }),
-              ),
-            ],
-          ),
+                      ),
+                    );
+                  },
+                );
+              }),
+            ),
+          ],
         ),
       ),
 
@@ -475,13 +510,10 @@ class MenuView extends StatelessWidget {
 Widget countBox({required int countValue}) {
   return Container(
     padding: const EdgeInsets.all(4),
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      color: const Color(0xFF8E2DE2),
-    ),
+    decoration: BoxDecoration(shape: BoxShape.circle, color: textPrimary),
     child: Text(
       countValue.toString(),
-      style: TextStyle(fontSize: 12, color: Colors.white),
+      style: TextStyle(fontSize: 14, color: scaffoldBgDark),
     ),
   );
 }

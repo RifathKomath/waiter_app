@@ -73,33 +73,33 @@ class AppTextField extends StatelessWidget {
             inputFormatters: inputFormatters,
             keyboardType: textInputType,
             validator: validator,
-            cursorColor: whiteClr,
-style: AppTextStyles.textStyle_400_14.copyWith(color: whiteClr),
+            cursorColor: scaffoldBgDark,
+            style: AppTextStyles.textStyle_400_14.copyWith(color: Colors.black),
             decoration: InputDecoration(
               filled: true,
-              fillColor: const Color(0xFF5E5A6A),
+              fillColor: textPrimary,
               counterText: '',
               suffixIcon: suffixIcon,
               prefixIcon: prefixIcon,
               hintText: useHintInsteadOfLabel ? labelText : null,
               labelText: useHintInsteadOfLabel ? null : labelText,
               hintStyle: AppTextStyles.textStyle_500_14.copyWith(
-                color: textColor,
+                color: Colors.black,
               ),
               labelStyle: AppTextStyles.textStyle_500_14.copyWith(
-                color: textColor,
+                color: Colors.black,
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide:  BorderSide.none,
+                borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide:  BorderSide.none,
+                borderSide: BorderSide.none,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide:  BorderSide.none,
+                borderSide: BorderSide.none,
               ),
             ),
           ),
@@ -113,7 +113,7 @@ Widget customTitle(final String label, bool isRequired) {
   return RichText(
     text: TextSpan(
       text: label,
-      style: AppTextStyles.textStyle_500_14.copyWith(color: textColor),
+      style: AppTextStyles.textStyle_500_14.copyWith(color: whiteClr),
       children: isRequired
           ? const [
               TextSpan(

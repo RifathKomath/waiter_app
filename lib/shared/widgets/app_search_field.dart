@@ -15,7 +15,7 @@ class AppSearchField extends StatelessWidget {
     required this.onChanged,
     this.hintText = 'Search...',
    
-    this.height = 35,
+    this.height = 45,
   });
 
   @override
@@ -25,27 +25,31 @@ class AppSearchField extends StatelessWidget {
       height: height,
       child: TextFormField(
         controller: controller,
+        cursorColor: scaffoldBgDark,
         onChanged: onChanged,
         style: AppTextStyles.textStyle_400_14.copyWith(
-          decoration: TextDecoration.none,color: whiteClr
+          decoration: TextDecoration.none,color: textPrimary
         ),
         decoration: InputDecoration(
+          filled: true,
+          
+          fillColor: cardBgLight,
           hintText: hintText,
           contentPadding: const EdgeInsets.symmetric(horizontal: 12),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: whiteClr),
+            borderSide:  BorderSide.none,
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: whiteClr),
+            borderSide:BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: textColor, width: 2.0),
+            borderSide: BorderSide.none,
           ),
-          suffixIcon: const Icon(Icons.search, size: 16,color: textColor,),
-          hintStyle: AppTextStyles.textStyle_400_14.copyWith(color: whiteClr),
+          suffixIcon: const Icon(Icons.search, size: 16,color: textPrimary,),
+          hintStyle: AppTextStyles.textStyle_400_14.copyWith(color: textPrimary),
         ),
       ),
     );

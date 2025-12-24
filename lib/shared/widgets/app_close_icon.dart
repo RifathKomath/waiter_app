@@ -15,7 +15,7 @@ class AppCloseIcon extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration( borderRadius: BorderRadius.circular(100)),
-        child: Icon(Icons.close,color: whiteClr,),
+        child: Icon(Icons.close,color: textPrimary,),
       ),
     );
   }

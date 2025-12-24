@@ -28,7 +28,7 @@ Future<void> showCommonDialog({
         child: FadeTransition(
           opacity: animation,
           child: Dialog(
-            backgroundColor: whiteClr,
+            backgroundColor: cardBgLight,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
@@ -39,7 +39,7 @@ Future<void> showCommonDialog({
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xFF4A00E0),
+                    color: scaffoldBgDark,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(15),
                       topRight: Radius.circular(15),

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:restuarant_app/shared/widgets/app_success_dialog.dart';
 import '../../../shared/utils/screen_utils.dart';
 import '../../../shared/widgets/app_toast.dart';
 import '../../view/dash_board/dash_board_view.dart';
@@ -26,7 +27,7 @@ class LoginController extends GetxController {
   var userName = "Faheem";
   var password = "Faheem";
 
-  void login() async {
+  void login({required BuildContext context}) async {
   try {
     isLoading.value = true;
 
@@ -39,8 +40,10 @@ class LoginController extends GetxController {
     } else if (userNameCtrl.text == userName &&
         passwordCtrl.text == password) {
         await  Future.delayed(Duration(seconds: 1));
-          showToast("Login Completed Successfully", isError: false);
-       Screen.openAsNewPage(DashBoardView());
+      SuccessDialog.show(context, message: "Login successfully completed",onComplete: () {
+        Screen.openAsNewPage(DashBoardView());
+      },);
+       
       
     } else {
       showToast("Login Failed");

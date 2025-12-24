@@ -37,33 +37,31 @@ class AppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color effectiveButtonColor = isErrorButton
         ? red
-        : (bgColor ?? buttonColor.colors.first);
+        : (bgColor ?? buttonColor);
 
     final Color finalTextColor =
-        textColor ?? (isFilled
-            ? appBarClr
+        textColor ??
+        (isFilled
+            ? clr
             : isFilledLightBlue == true
-                ? darkBlue
-                : (isErrorButton ? darkRed : Colors.white));
+            ? darkBlue
+            : (isErrorButton ? darkRed : Colors.white));
 
     final BoxDecoration decoration = isFilled
         ? BoxDecoration(
-            color: whiteClr,
+            color: textPrimary,
             borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: appBarClr),
           )
         : isFilledLightBlue == true
-            ? BoxDecoration(
-                color: lightBlueBackground,
-                borderRadius: BorderRadius.circular(12.r),
-              )
-            : BoxDecoration(
-                borderRadius: BorderRadius.circular(12.r),
-                gradient: isErrorButton
-                    ? null
-                    : (bgColor == null ? buttonColor : null),
-                color: isErrorButton ? red : (bgColor != null ? bgColor : null),
-              );
+        ? BoxDecoration(
+            color: lightBlueBackground,
+            borderRadius: BorderRadius.circular(12.r),
+          )
+        : BoxDecoration(
+            borderRadius: BorderRadius.circular(12.r),
+
+            color: isErrorButton ? red : (bgColor != null ? bgColor : null),
+          );
 
     return GestureDetector(
       onTap: (isLoaderBtn ?? false) ? null : onTap,
@@ -72,20 +70,22 @@ class AppButton extends StatelessWidget {
         alignment: Alignment.center,
         decoration: decoration,
         child: (isLoaderBtn ?? false)
-            ? const CupertinoActivityIndicator(color: Colors.white)
+            ? CupertinoActivityIndicator(color: textPrimary)
             : Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (isPrefixIconEnabled && icon != null)
-                    Icon(icon, color: finalTextColor, size: 20),
+                    Icon(icon, color: textPrimary, size: 20),
                   if (isPrefixIconEnabled && icon != null) 8.wBox,
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: 10.0.w, vertical: 0.w),
+                      horizontal: 10.0.w,
+                      vertical: 0.w,
+                    ),
                     child: Text(
                       label,
-                      style: AppTextStyles.textStyle_500_16.copyWith(
+                      style: AppTextStyles.textStyle_600_16.copyWith(
                         color: finalTextColor,
                       ),
                     ),

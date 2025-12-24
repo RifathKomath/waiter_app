@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../view/menu/menu_view.dart';
 
 class CategoryController extends GetxController {
+  
 
   final TextEditingController searchCntrl = TextEditingController();
 
